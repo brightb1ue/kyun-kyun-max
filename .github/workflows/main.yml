@@ -1,0 +1,27 @@
+name: Buy Action
+on:
+  schedule:
+    - cron: 30 12 * * *
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: [ubuntu-latest]
+    name: Buy Action
+    steps:  
+
+      - uses: actions/checkout@v3    
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r requirements.txt
+      
+      - name: Run Scripts
+        run: make buy
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          COUNT: ${{ secrets.COUNT }}
+          SLACK_BOT_TOKEN : ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL :  ${{ secrets.SLACK_CHANNEL }}
